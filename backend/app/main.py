@@ -8,7 +8,7 @@ app = FastAPI(title="Gen-AI Document Research Chatbot")
 # Enable CORS for frontend (if needed)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Replace with frontend URL in production
+    allow_origins=["http://localhost:5173"],  # Replace with frontend URL in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
