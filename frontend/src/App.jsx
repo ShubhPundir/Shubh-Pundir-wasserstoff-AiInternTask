@@ -1,7 +1,9 @@
 import { Routes, Route } from 'react-router-dom'
+
 import Navbar from './components/NavBar';
 import FileUpload from "./pages/FileUpload";
-import HomePage from './pages/HomePage';
+import Home from './pages/Home';
+import DocumentsPage from './pages/DocumentInterface';
 
 function App() {
   return (
@@ -9,8 +11,9 @@ function App() {
       <Navbar />
       <Routes>
         {/* <Route path="/navbar" element={<Navbar />} /> */}
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<Home />} />
         <Route path="/upload" element={<FileUpload />} />
+        <Route path="/documents" element={<DocumentsPage />} />
       </Routes>
     </div>
   );
