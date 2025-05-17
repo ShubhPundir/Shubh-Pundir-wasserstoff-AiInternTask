@@ -17,3 +17,4 @@ except Exception as e:
     print(e)
 
 db = client['chat-query']
+parsed_docs = db['parsed_docs']
