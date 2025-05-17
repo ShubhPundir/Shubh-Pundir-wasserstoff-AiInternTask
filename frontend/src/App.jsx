@@ -1,11 +1,17 @@
 import { Routes, Route } from 'react-router-dom'
-import FileUpload from "./FileUpload";
+import Navbar from './components/NavBar';
+import FileUpload from "./pages/FileUpload";
+import HomePage from './pages/HomePage';
 
 function App() {
   return (
     <div>
-      <h1>Gen-AI Document Research Chatbot</h1>
-      <FileUpload />
+      <Navbar />
+      <Routes>
+        {/* <Route path="/navbar" element={<Navbar />} /> */}
+        <Route path="/" element={<HomePage />} />
+        <Route path="/upload" element={<FileUpload />} />
+      </Routes>
     </div>
   );
 }
