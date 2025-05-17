@@ -1,7 +1,6 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from pathlib import Path
 import shutil
-import uuid
 from datetime import datetime
 
 from app.services.document_parser import parse_document
@@ -27,6 +26,7 @@ async def upload_file(file: UploadFile = File(...)):
     # Save file to disk
     with file_path.open("wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
+        print(f"    File {file.filename} saved to /data as {new_filename}")
 
     try:
         parsed_text = parse_document(str(file_path))
@@ -43,6 +43,8 @@ async def upload_file(file: UploadFile = File(...)):
             "parsed_text": parsed_text,
             "upload_time": datetime.now()
         })
+        print(f"    MongoDB document stored")
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to save document in DB: {str(e)}")
 

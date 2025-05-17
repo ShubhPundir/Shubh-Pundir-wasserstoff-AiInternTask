@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api import document_getter
 from app.api import upload
+
 
 app = FastAPI(title="Gen-AI Document Research Chat Query")
 
@@ -20,3 +22,4 @@ def root():
 
 # Register upload route
 app.include_router(upload.router, prefix="/api")
+app.include_router(document_getter.router, prefix="/api")

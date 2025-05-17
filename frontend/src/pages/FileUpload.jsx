@@ -12,6 +12,7 @@ function FileUpload() {
   };
 
   const handleUpload = async () => {
+    console.log("handleUpload() called")
     if (!file) {
       setMessage("Please select a file first.");
       return;
