@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api import upload
 
-app = FastAPI(title="Gen-AI Document Research Chatbot")
+app = FastAPI(title="Gen-AI Document Research Chat Query")
 
 # Enable CORS for frontend (if needed)
 app.add_middleware(
@@ -16,7 +16,7 @@ app.add_middleware(
 
 @app.get("/")
 def root():
-    return {"message": "Welcome to the Gen-AI Research Chatbot API"}
+    return {"message": "Welcome to the Gen-AI Research Chat Query API"}
 
 # Register upload route
 app.include_router(upload.router, prefix="/api")

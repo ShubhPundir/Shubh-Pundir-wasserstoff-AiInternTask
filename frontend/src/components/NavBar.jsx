@@ -6,7 +6,7 @@ function Navbar() {
     <nav className="navbar">
       <div className="navbar-brand">
         <Link to='/' style={{ textDecoration: 'none', color: 'inherit' }}>
-          Gen-AI Chatbot
+          Gen-AI Chat Query
         </Link>
       </div>
       <ul className="navbar-links">

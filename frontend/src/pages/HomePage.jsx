@@ -5,7 +5,7 @@ import '../css/HomePage.css'; // or './HomePage.css' depending on where you save
 function HomePage() {
   return (
     <div style={{ padding: '2rem', textAlign: 'center' }}>
-      <h2>Welcome to Gen-AI Document Research Chatbot</h2>
+      <h2>Welcome to Gen-AI Document Research Chat Query</h2>
       <p>This tool allows you to upload documents and ask questions about their content using AI.</p>
       <Link to="/upload">
         <button style={{ padding: '0.5rem 1rem', marginTop: '1rem' }}>
