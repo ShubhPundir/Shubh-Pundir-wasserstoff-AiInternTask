@@ -4,12 +4,12 @@ import shutil
 from datetime import datetime
 
 from app.services.document_parser import parse_document
-from app.database.mongodb import parsed_docs  # 👈 Import the collection
+from core.mongodb import parsed_docs  # 👈 Import the collection
 
 router = APIRouter()
 
 ALLOWED_EXTENSIONS = {".pdf", ".docx", ".png", ".jpg", ".jpeg"}
-UPLOAD_DIR = Path("data")
+UPLOAD_DIR = Path("data/docs")
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
 @router.post("/upload/")

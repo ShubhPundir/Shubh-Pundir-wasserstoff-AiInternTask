@@ -7,7 +7,7 @@ from fastapi.responses import FileResponse
 from fastapi import APIRouter, HTTPException
 
 
-from database.mongodb import parsed_docs
+from core.mongodb import parsed_docs
 
 router = APIRouter()
 
