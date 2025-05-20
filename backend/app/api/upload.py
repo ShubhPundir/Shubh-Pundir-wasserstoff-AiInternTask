@@ -5,6 +5,7 @@ from datetime import datetime
 
 from app.services.document_parser import parse_document
 from app.core.mongodb import parsed_docs
+from app.services.vector_ingest import ingest_to_qdrant
 
 router = APIRouter()
 
@@ -35,7 +36,7 @@ async def upload_file(file: UploadFile = File(...)):
 
     # Store document in MongoDB
     try:
-        parsed_docs.insert_one({
+        result = parsed_docs.insert_one({
             "original_filename": file.filename,
             "stored_filename": new_filename,
             "file_path": str(file_path),
@@ -43,10 +44,15 @@ async def upload_file(file: UploadFile = File(...)):
             "parsed_text": parsed_text,
             "upload_time": datetime.now()
         })
+        inserted_id = str(result.inserted_id)
         print(f"    MongoDB document stored")
+
+        ## Module to ingest into vector store
+        ingest_to_qdrant(inserted_id,parsed_text,"Testing")
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to save document in DB: {str(e)}")
+
 
     return {
         "message": "File uploaded, parsed, and stored successfully",
