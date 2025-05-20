@@ -4,7 +4,7 @@ import shutil
 from datetime import datetime
 
 from app.services.document_parser import parse_document
-from core.mongodb import parsed_docs  # 👈 Import the collection
+from app.core.mongodb import parsed_docs
 
 router = APIRouter()
 

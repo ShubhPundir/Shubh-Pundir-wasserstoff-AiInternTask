@@ -10,6 +10,7 @@ def get_qdrant_client():
 
 def get_embeddings():
     return HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2") # 384 dimensional vector model
+    ## can try with: all-mpnet-base-v2 for a 768 dimensional vector model 
 
 def get_vector_store(collection_name: str = "docs"):
     client = get_qdrant_client()
