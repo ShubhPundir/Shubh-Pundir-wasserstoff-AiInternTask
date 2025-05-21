@@ -25,7 +25,7 @@ function FileUpload() {
       const response = await axios.post("http://127.0.0.1:8000/api/upload/", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      setMessage(`Success! Uploaded: ${response.data.original_filename}`);
+      setMessage(`Success! Uploaded: ${response.data.filename}`);
     } catch (error) {
       setMessage(`Error: ${error.response?.data?.detail || "Upload failed"}`);
     }

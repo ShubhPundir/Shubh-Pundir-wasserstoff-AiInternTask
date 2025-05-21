@@ -27,7 +27,7 @@ async def upload_file(file: UploadFile = File(...)):
     # Save file to disk
     with file_path.open("wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
-        print(f"    File {file.filename} saved to /data as {new_filename}")
+        print(f"    File {file.filename} saved to /data/docs as {new_filename}")
 
     try:
         parsed_text = parse_document(str(file_path))
@@ -47,15 +47,19 @@ async def upload_file(file: UploadFile = File(...)):
         inserted_id = str(result.inserted_id)
         print(f"    MongoDB document stored")
 
-        ## Module to ingest into vector store
-        ingest_to_qdrant(inserted_id,parsed_text,"Testing")
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to save document in DB: {str(e)}")
 
+    try:
+        ## Module to ingest into vector store
+        ingest_to_qdrant(inserted_id, parsed_text, "Testing")
+        print(f"Vector Embeddings for {inserted_id} has been stored for {result.original_filename}")
+    except Exception as e:
+        print(f"Vector store ingestion failed: {str(e)}")
 
     return {
         "message": "File uploaded, parsed, and stored successfully",
         "filename": new_filename,
-        "parsed_text_preview": parsed_text[:1000]
+        "document_id": inserted_id
     }

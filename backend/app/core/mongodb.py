@@ -6,9 +6,6 @@ from config import get_MONGO_ATLAS_URI
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
-# load_dotenv()
-
-# uri: str = os.getenv("MONGO_ATLAS_URI")
 uri = get_MONGO_ATLAS_URI()
 
 client = MongoClient(uri, server_api=ServerApi("1"))

@@ -5,7 +5,7 @@ from langchain_huggingface import HuggingFaceEmbeddings
 
 
 def get_qdrant_client():
-    client = QdrantClient(path="backend/data/qdrant_db")
+    client = QdrantClient(path="data/qdrant_db")
     return client
 
 def get_embeddings():
