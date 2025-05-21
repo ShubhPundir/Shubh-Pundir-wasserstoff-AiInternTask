@@ -1,27 +1,52 @@
 from pathlib import Path
 import fitz  # PyMuPDF
 import docx
+from docx.oxml.ns import qn
 import pytesseract
-from PIL import Image, ImageFilter, ImageOps
+from PIL import Image, ImageOps
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
 
-def extract_text_from_pdf(file_path: str) -> str:
-    """Extract text from a PDF file using PyMuPDF."""
+def extract_text_from_pdf(file_path: str) -> list[tuple[int, str]]:
+    """Extract text from PDF as a list of (page_num, text)."""
     doc = fitz.open(file_path)
-    full_text = []
-    for page_num, page in enumerate(doc):
+    full_doc = []
+    for page_num, page in enumerate(doc, start=1):
         text = page.get_text()
-        full_text.append(f"--- Page {page_num + 1} ---\n{text}")
+        full_doc.append((page_num, text))
     doc.close()
-    return "\n".join(full_text)
+    return full_doc
 
 
-def extract_text_from_docx(file_path: str) -> str:
-    """Extract text from a DOCX file using python-docx."""
+def extract_text_from_docx(file_path: str) -> list[tuple[int, str]]:
+    """Extract text from DOCX file, simulating pages based on manual page breaks."""
     doc = docx.Document(file_path)
-    full_text = [para.text for para in doc.paragraphs if para.text.strip()]
-    return "\n".join(full_text)
+    pages = []
+    current_page = []
+    page_num = 1
+
+    for para in doc.paragraphs:
+        current_page.append(para.text)
+
+        # Check if this paragraph ends with a manual page break
+        for run in para.runs:
+            if any(
+                child.tag == qn("w:br") and child.get(qn("w:type")) == "page"
+                for child in run._element
+            ):
+                # Append current page and reset
+                page_text = "\n".join(current_page).strip()
+                if page_text:
+                    pages.append((page_num, page_text))
+                    page_num += 1
+                    current_page = []
+
+    # Add any remaining text as the last page
+    remaining_text = "\n".join(current_page).strip()
+    if remaining_text:
+        pages.append((page_num, remaining_text))
+
+    return pages
 
 
 def preprocess_image(image: Image.Image) -> Image.Image:
@@ -45,16 +70,17 @@ def preprocess_image(image: Image.Image) -> Image.Image:
     return image
 
 
-def extract_text_from_image(file_path: str) -> str:
-    """Extract text from image files using Tesseract OCR."""
+def extract_text_from_image(file_path: str) -> list[tuple[int, str]]:
+    """Return single page image text as list with one (page_num, text)."""
     image = Image.open(file_path)
     processed_image = preprocess_image(image)
     text = pytesseract.image_to_string(processed_image)
-    return text
+    return [(1, text)]
 
 
-def parse_document(file_path: str) -> str:
-    """Main function to detect type and parse document or image."""
+
+def parse_document(file_path: str) -> list[tuple[int, str]]:
+    """Return document as list of (page_num, text)."""
     path = Path(file_path)
     ext = path.suffix.lower()
 

@@ -7,8 +7,8 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 from app.core.vector_store import get_vector_store
 
-def ingest_to_qdrant(doc_id: str, content: str, collection_name=None):
-    store = get_vector_store(collection_name=collection_name or "docs")
+def ingest_to_qdrant(doc_id: str, full_doc: list[tuple[int, str]], collection_name=None):
+    store = get_vector_store(collection_name=collection_name or "docs") ## docs is the default collection name
 
     # Split the content into smaller chunks
     splitter = RecursiveCharacterTextSplitter(
@@ -16,15 +16,27 @@ def ingest_to_qdrant(doc_id: str, content: str, collection_name=None):
         chunk_overlap=100
     )
 
-    # Create base Document object with metadata
-    base_doc = Document(
-        page_content=content,
-        metadata={"doc_id": doc_id}
-    )
+    all_chunks = []
 
-    # Split the document into smaller chunks
-    split_docs = splitter.split_documents([base_doc])
+    for page_num, page_text in full_doc:
+        paragraphs = [p.strip() for p in page_text.split('\n\n') if p.strip()]
+        for para_num, paragraph in enumerate(paragraphs, start=1):
+            doc = Document(
+                page_content=paragraph,
+                metadata={
+                    "doc_id": doc_id,
+                    "page": page_num,
+                    "paragraph": para_num
+                }
+            )
+            chunks = splitter.split_documents([doc])
+            for chunk in chunks:
+                chunk.metadata.update({
+                    "doc_id": doc_id,
+                    "page": page_num,
+                    "paragraph": para_num
+                })
+            all_chunks.extend(chunks)
 
-    # Add to vector store
-    store.add_documents(split_docs)
-    print(f"Ingested {len(split_docs)} chunks for doc_id={doc_id}")
+    store.add_documents(all_chunks)
+    print(f"Ingested {len(all_chunks)} chunks for doc_id={doc_id}")
