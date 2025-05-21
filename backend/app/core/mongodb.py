@@ -1,11 +1,13 @@
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from dotenv import load_dotenv
+from config.py import get_MONGO_ATLAS_URI
 import os
 
-load_dotenv()
+# load_dotenv()
 
-uri: str = os.getenv("MONGO_ATLAS_URI")
+# uri: str = os.getenv("MONGO_ATLAS_URI")
+uri = get_MONGO_ATLAST_URI()
 
 client = MongoClient(uri, server_api=ServerApi("1"))
 
