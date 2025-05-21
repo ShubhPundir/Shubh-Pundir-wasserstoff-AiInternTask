@@ -31,10 +31,10 @@ def query_documents(query: str) -> dict:
 
         print(f"Retrieved document count: {len(source_docs)}")
 
-        # === Build context for synthesis ===
+        # Build context for synthesis 
         context = "\n\n".join([doc.page_content for doc in source_docs])
 
-        # === Use Gemini to synthesize the final answer ===
+        # Use Gemini to synthesize the final answer 
         synthesis_prompt = PromptTemplate.from_template(
             """You are an AI assistant. Based on the following excerpts from multiple documents, \
             generate a clear and concise answer to the user's query. \
@@ -45,7 +45,7 @@ def query_documents(query: str) -> dict:
         synthesis_chain = LLMChain(llm=llm, prompt=synthesis_prompt)
         synthesized_answer = synthesis_chain.run({"context": context})
 
-        # === Build citations ===
+        # Build citations
         citations = []
         for doc in source_docs:
             metadata = doc.metadata
