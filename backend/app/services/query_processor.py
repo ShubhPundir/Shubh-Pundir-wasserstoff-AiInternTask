@@ -17,11 +17,18 @@ def query_documents(query: str) -> str:
             return_source_documents=True
         )
         result = qa_chain.invoke({"query": query})
+        source_docs = result.get("source_documents") or []        
+
+        if not source_docs:
+            return "No relevant documents were found for your query."
+
+
+        # print("\n=== Retrieved Source Docs ===")
+        # for doc in source_docs:
+        #     print(doc.page_content[:200])  # Show a preview
+        # print("=================================\n")
         
-        print("\n=== Retrieved Source Docs ===")
-        for doc in result['source_documents']:
-            print(doc.page_content[:200])  # print preview
-        print("=============================\n")
+        print(f"Retrieved document count: {len(source_docs)}")
         
         return result["result"]
     except Exception as e:
