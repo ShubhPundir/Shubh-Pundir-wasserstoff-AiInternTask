@@ -24,14 +24,15 @@ async def read_all_files():
         doc_id = str(doc.get("_id"))
         timestamp = doc.get("upload_time")
         file_path = os.path.normpath(file_path)
-
+        themes = doc.get("themes") or []
         if not os.path.exists(os.getcwd() + file_path):
             results.append({
                 "id": doc_id,
                 "original_filename": original_filename,
                 "timestamp": timestamp,
                 # "file_path": os.getcwd() +'\\'+ file_path
-                "file_path": file_path
+                "file_path": file_path,
+                "themes": themes
             })
             continue
         else:

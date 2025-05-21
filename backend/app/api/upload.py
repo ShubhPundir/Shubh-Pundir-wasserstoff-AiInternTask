@@ -6,6 +6,7 @@ from datetime import datetime
 from app.services.document_parser import parse_document
 from app.core.mongodb import parsed_docs
 from app.services.vector_ingest import ingest_to_qdrant
+from app.services.theme_analyzer import extract_themes_from_document
 
 router = APIRouter()
 
@@ -34,17 +35,28 @@ async def upload_file(file: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error parsing document: {str(e)}")
 
+    flat_text = "\n".join([text for _, text in parsed_pages])
+    
+    # Extract themes from the flattened text
+    try:
+        themes = extract_themes_from_document(flat_text)
+        print(f"    Extracted themes: {themes}")
+    except Exception as e:
+        # If theme extraction fails, continue without themes or handle as needed
+        print(f"Theme extraction failed: {str(e)}")
+        themes = []
+    
     # Store document in MongoDB
     try:
 
-        flat_text = "\n".join([text for _, text in parsed_pages])
         result = parsed_docs.insert_one({
             "original_filename": file.filename,
             "stored_filename": new_filename,
             "file_path": str(file_path),
             "file_extension": ext,
             "parsed_text": flat_text,
-            "upload_time": datetime.now()
+            "upload_time": datetime.now(),
+            "themes" : themes
         })
 
         inserted_id = str(result.inserted_id)

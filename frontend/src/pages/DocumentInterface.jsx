@@ -42,24 +42,32 @@ const DocumentsPage = () => {
           <thead>
             <tr>
               <th>S.No.</th>
+              <th>MongoDB ID</th>
               <th>Original Filename</th>
               <th>Timestamp</th>
+              <th>Themes</th> {/* New themes column */}
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {documents.length === 0 ? (
               <tr>
-                <td colSpan="4" className="no-documents">
+                <td colSpan="6" className="no-documents">
                   No documents found.
                 </td>
               </tr>
             ) : (
               documents.map((doc, index) => (
-                <tr key={doc.id}>
+                <tr key={doc._id || doc.id}>
                   <td>{index + 1}</td>
+                  <td className="mongo-id">{doc.id}</td>
                   <td>{doc.original_filename}</td>
                   <td>{formatTimestamp(doc.timestamp)}</td>
+                  <td>
+                    {doc.themes && doc.themes.length > 0
+                      ? doc.themes.join(', ')
+                      : '-'}
+                  </td>
                   <td>
                     {doc.file_path ? (
                       <a
