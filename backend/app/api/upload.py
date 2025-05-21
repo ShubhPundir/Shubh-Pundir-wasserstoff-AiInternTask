@@ -53,8 +53,8 @@ async def upload_file(file: UploadFile = File(...)):
 
     try:
         ## Module to ingest into vector store
-        ingest_to_qdrant(inserted_id, parsed_text, "Testing")
-        print(f"Vector Embeddings for {inserted_id} has been stored for {result.original_filename}")
+        ingest_to_qdrant(inserted_id, parsed_text, "docs")
+        print(f"    Vector Embeddings for {inserted_id} has been stored")
     except Exception as e:
         print(f"Vector store ingestion failed: {str(e)}")
 
