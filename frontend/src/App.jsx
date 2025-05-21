@@ -4,6 +4,7 @@ import Navbar from './components/NavBar';
 import FileUpload from "./pages/FileUpload";
 import Home from './pages/Home';
 import DocumentsPage from './pages/DocumentInterface';
+import QueryChatbotPage from './pages/QueryChatbotPage';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/upload" element={<FileUpload />} />
         <Route path="/documents" element={<DocumentsPage />} />
+        <Route path="/query" element={<QueryChatbotPage />} />
       </Routes>
     </div>
   );

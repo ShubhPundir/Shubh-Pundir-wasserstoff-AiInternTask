@@ -1,0 +1,62 @@
+/* src/pages/QueryChatbotPage.css */
+
+.chatbot-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.chatbot-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.chatbot-input-section {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.chatbot-input {
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.chatbot-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.chatbot-error {
+  color: red;
+  margin-bottom: 20px;
+}
+
+.chatbot-response-section {
+  margin-top: 20px;
+}
+
+.chatbot-card {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+.chatbot-subtitle {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.chatbot-citation {
+  margin-top: 10px;
+  padding: 10px;
+  border-left: 3px solid #007bff;
+  background-color: #fff;
+}
