@@ -30,20 +30,23 @@ async def upload_file(file: UploadFile = File(...)):
         print(f"    File {file.filename} saved to /data/docs as {new_filename}")
 
     try:
-        parsed_text = parse_document(str(file_path))
+        parsed_pages = parse_document(str(file_path))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error parsing document: {str(e)}")
 
     # Store document in MongoDB
     try:
+
+        flat_text = "\n".join([text for _, text in parsed_pages])
         result = parsed_docs.insert_one({
             "original_filename": file.filename,
             "stored_filename": new_filename,
             "file_path": str(file_path),
             "file_extension": ext,
-            "parsed_text": parsed_text,
+            "parsed_text": flat_text,
             "upload_time": datetime.now()
         })
+
         inserted_id = str(result.inserted_id)
         print(f"    MongoDB document stored")
 
@@ -53,7 +56,7 @@ async def upload_file(file: UploadFile = File(...)):
 
     try:
         ## Module to ingest into vector store
-        ingest_to_qdrant(inserted_id, parsed_text, "docs")
+        ingest_to_qdrant(inserted_id, parsed_pages, "docs")
         print(f"    Vector Embeddings for {inserted_id} has been stored")
     except Exception as e:
         print(f"Vector store ingestion failed: {str(e)}")

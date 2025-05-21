@@ -15,7 +15,7 @@ response = client.scroll(
 for point in response[0]:
     print("ID:", point.id)
     print("Payload:", point.payload)
-    print("Contains doc_id:", "doc_id" in point.payload)
-    print("Contains page:", "page" in point.payload)
-    print("Contains paragraph:", "paragraph" in point.payload)
+    print("Contains doc_id:", "doc_id" in point.payload['metadata'])
+    print("Contains page:", "page" in point.payload['metadata'])
+    print("Contains paragraph:", "paragraph" in point.payload['metadata'])
     print()

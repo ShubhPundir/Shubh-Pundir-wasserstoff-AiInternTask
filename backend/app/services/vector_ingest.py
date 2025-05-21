@@ -30,13 +30,7 @@ def ingest_to_qdrant(doc_id: str, full_doc: list[tuple[int, str]], collection_na
                 }
             )
             chunks = splitter.split_documents([doc])
-            for chunk in chunks:
-                chunk.metadata.update({
-                    "doc_id": doc_id,
-                    "page": page_num,
-                    "paragraph": para_num
-                })
             all_chunks.extend(chunks)
 
     store.add_documents(all_chunks)
-    print(f"Ingested {len(all_chunks)} chunks for doc_id={doc_id}")
+    print(f"    Ingested {len(all_chunks)} chunks for doc_id={doc_id}")
